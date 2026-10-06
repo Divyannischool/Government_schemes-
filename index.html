@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>भारत योजना सहायक 🇮🇳</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:Arial,"Noto Sans Devanagari",sans-serif;
+  background:#f5f7fb;color:#172033
+}
+header{
+  background:linear-gradient(135deg,#ff6b00,#ff9d00);
+  color:white;text-align:center;padding:30px 15px
+}
+header h1{font-size:30px;margin-bottom:8px}
+header p{font-size:15px}
+.container{max-width:1050px;margin:25px auto;padding:0 15px}
+
+.panel{
+  background:white;padding:20px;border-radius:18px;
+  box-shadow:0 5px 25px #00000012;margin-bottom:20px
+}
+.panel h2{margin-bottom:18px}
+
+.grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:12px
+}
+label{font-weight:bold;font-size:14px}
+select,input,textarea{
+  width:100%;margin-top:7px;padding:12px;
+  border:1px solid #d9dfe8;border-radius:10px;
+  font-size:15px;outline:none;background:white
+}
+textarea{min-height:100px;resize:vertical}
+
+button{
+  border:0;border-radius:11px;padding:13px 18px;
+  background:#ff7200;color:white;font-weight:bold;
+  font-size:16px;cursor:pointer
+}
+button:hover{opacity:.9}
+.searchBtn{width:100%;margin-top:15px}
+
+.quick{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:15px
+}
+.quick button{
+  background:#fff3e8;color:#e65e00;
+  border:1px solid #ffd0aa;font-size:14px;padding:9px 12px
+}
+
+#result{margin-top:20px}
+
+.card{
+  background:white;border-radius:16px;padding:20px;
+  margin-bottom:15px;box-shadow:0 4px 18px #00000010
+}
+.card h3{color:#d95d00;margin-bottom:10px}
+.card p{line-height:1.7;margin:5px 0}
+.badge{
+  display:inline-block;background:#e9f7ef;color:#168447;
+  padding:5px 9px;border-radius:20px;font-size:12px;
+  margin:3px
+}
+.apply{
+  display:inline-block;margin-top:12px;
+  background:#087f5b;color:white;text-decoration:none;
+  padding:10px 15px;border-radius:9px
+}
+.loading{text-align:center;padding:25px;font-size:17px}
+.error{
+  background:#ffe8e8;color:#a40000;padding:15px;
+  border-radius:10px
+}
+.info{
+  background:#eaf4ff;padding:16px;border-radius:12px;
+  line-height:1.6
+}
+footer{
+  margin-top:35px;background:#172033;color:white;
+  text-align:center;padding:20px;font-size:13px
+}
+@media(max-width:650px){
+  .grid{grid-template-columns:1fr}
+  header h1{font-size:24px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🇮🇳 भारत योजना सहायक</h1>
+  <p>सरकारी योजनाएँ खोजें • पात्रता समझें • आधिकारिक जानकारी पाएँ</p>
+</header>
+
+<div class="container">
+
+<div class="panel">
+<h2>👤 अपनी जानकारी</h2>
+
+<div class="grid">
+
+<div>
+<label>राज्य</label>
+<select id="state">
+<option value="">सभी राज्य</option>
+<option>मध्य प्रदेश</option>
+<option>उत्तर प्रदेश</option>
+<option>राजस्थान</option>
+<option>महाराष्ट्र</option>
+<option>बिहार</option>
+<option>दिल्ली</option>
+<option>गुजरात</option>
+<option>हरियाणा</option>
+<option>पंजाब</option>
+<option>छत्तीसगढ़</option>
+<option>झारखंड</option>
+<option>अन्य</option>
+</select>
+</div>
+
+<div>
+<label>उम्र</label>
+<input id="age" type="number" placeholder="जैसे 25">
+</div>
+
+<div>
+<label>मासिक/वार्षिक आय</label>
+<input id="income" placeholder="जैसे ₹15,000 प्रति माह">
+</div>
+
+<div>
+<label>श्रेणी</label>
+<select id="category">
+<option value="">सभी</option>
+<option>किसान</option>
+<option>महिला</option>
+<option>छात्र</option>
+<option>युवा</option>
+<option>वरिष्ठ नागरिक</option>
+<option>दिव्यांग</option>
+<option>गरीब परिवार</option>
+<option>व्यवसाय</option>
+<option>रोजगार</option>
+</select>
+</div>
+
+</div>
+</div>
+
+
+<div class="panel">
+
+<h2>🔎 योजना खोजें</h2>
+
+<textarea id="question"
+placeholder="जैसे: मैं मध्य प्रदेश का किसान हूँ। मेरे लिए कौन-कौन सी सरकारी योजनाएँ हैं?"></textarea>
+
+<div class="quick">
+<button onclick="quickSearch('किसानों के लिए सरकारी योजनाएँ')">🌾 किसान</button>
+<button onclick="quickSearch('महिलाओं के लिए सरकारी योजनाएँ')">👩 महिला</button>
+<button onclick="quickSearch('छात्रों के लिए सरकारी योजनाएँ')">🎓 छात्र</button>
+<button onclick="quickSearch('युवाओं के लिए रोजगार योजनाएँ')">💼 रोजगार</button>
+<button onclick="quickSearch('स्वास्थ्य संबंधी सरकारी योजनाएँ')">🏥 स्वास्थ्य</button>
+<button onclick="quickSearch('गरीब परिवारों के लिए योजनाएँ')">🏠 गरीब परिवार</button>
+</div>
+
+<button class="searchBtn" onclick="searchSchemes()">
+🔍 योजनाएँ खोजें
+</button>
+
+</div>
+
+
+<div id="result"></div>
+
+
+<div class="info">
+<b>ℹ️ महत्वपूर्ण:</b><br>
+योजना की पात्रता, लाभ, दस्तावेज और आवेदन की जानकारी समय के साथ बदल सकती है।
+आवेदन करने से पहले आधिकारिक सरकारी वेबसाइट पर जानकारी जरूर सत्यापित करें।
+<br><br>
+
+🌐 आधिकारिक योजना पोर्टल:
+<a href="https://www.myscheme.gov.in/hi" target="_blank">
+myScheme.gov.in
+</a>
+</div>
+
+</div>
+
+
+<footer>
+🇮🇳 भारत योजना सहायक<br>
+यह वेबसाइट केवल जानकारी के उद्देश्य से है।
+</footer>
+
+
+<script>
+
+/* =================================================
+   GROQ API KEY
+   अपनी नई Groq API key यहाँ डालें
+   ================================================= */
+
+const GROQ_API_KEY = "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";
+
+/* Current Groq model */
+const MODEL = "openai/gpt-oss-120b";
+
+
+function quickSearch(text){
+  document.getElementById("question").value = text;
+  searchSchemes();
+}
+
+
+async function searchSchemes(){
+
+  const question =
+    document.getElementById("question").value.trim();
+
+  const state =
+    document.getElementById("state").value;
+
+  const age =
+    document.getElementById("age").value;
+
+  const income =
+    document.getElementById("income").value;
+
+  const category =
+    document.getElementById("category").value;
+
+  const result =
+    document.getElementById("result");
+
+
+  if(!question){
+    result.innerHTML =
+      `<div class="error">कृपया अपना सवाल लिखें।</div>`;
+    return;
+  }
+
+
+  if(GROQ_API_KEY === "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"){
+    result.innerHTML =
+      `<div class="error">
+      पहले अपनी Groq API Key डालें।
+      </div>`;
+    return;
+  }
+
+
+  result.innerHTML =
+    `<div class="loading">⏳ योजनाएँ खोजी जा रही हैं...</div>`;
+
+
+const systemPrompt = `
+आप "भारत योजना सहायक" हैं।
+
+आपका काम भारतीय नागरिकों को सरकारी योजनाओं की
+जानकारी सरल और स्पष्ट हिंदी में देना है।
+
+यूजर की जानकारी:
+
+राज्य: ${state || "नहीं बताया"}
+उम्र: ${age || "नहीं बताई"}
+आय: ${income || "नहीं बताई"}
+श्रेणी: ${category || "नहीं बताई"}
+
+नियम:
+
+1. केवल वास्तविक सरकारी योजनाओं की जानकारी दें।
+2. Central और State दोनों योजनाएँ हो सकती हैं।
+3. गलत या काल्पनिक योजना न बनाएँ।
+4. पात्रता स्पष्ट बताएं।
+5. योजना का लाभ बताएं।
+6. जरूरी दस्तावेज बताएं।
+7. आवेदन प्रक्रिया बताएं।
+8. आधिकारिक वेबसाइट बताएं।
+9. जहाँ संभव हो myScheme.gov.in या संबंधित
+   सरकारी वेबसाइट का लिंक दें।
+10. अगर जानकारी निश्चित नहीं है तो साफ बताएं।
+11. किसी व्यक्ति को योजना मिलने की गारंटी न दें।
+12. उत्तर हमेशा हिंदी में दें।
+
+उत्तर इस format में दें:
+
+योजना का नाम:
+किसके लिए:
+मुख्य लाभ:
+पात्रता:
+जरूरी दस्तावेज:
+आवेदन कैसे करें:
+आधिकारिक वेबसाइट:
+
+कम से कम 5 उपयुक्त योजनाएँ बताने की कोशिश करें।
+`;
+
+
+try{
+
+const response = await fetch(
+"https://api.groq.com/openai/v1/chat/completions",
+{
+method:"POST",
+
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+GROQ_API_KEY
+},
+
+body:JSON.stringify({
+
+model:MODEL,
+
+messages:[
+{
+role:"system",
+content:systemPrompt
+},
+{
+role:"user",
+content:question
+}
+],
+
+temperature:0.2,
+max_completion_tokens:4000
+
+})
+});
+
+
+const data = await response.json();
+
+
+if(!response.ok){
+throw new Error(
+data?.error?.message ||
+"Groq API error"
+);
+}
+
+
+const answer =
+data?.choices?.[0]?.message?.content;
+
+
+if(!answer){
+throw new Error("उत्तर नहीं मिला");
+}
+
+
+displayAnswer(answer);
+
+
+}catch(error){
+
+console.error(error);
+
+result.innerHTML =
+`<div class="error">
+❌ ${escapeHTML(error.message)}
+<br><br>
+API Key और Internet connection जाँचें।
+</div>`;
+
+}
+
+}
+
+
+function displayAnswer(text){
+
+const result =
+document.getElementById("result");
+
+let html =
+escapeHTML(text);
+
+
+/* Markdown को थोड़ा सुंदर बनाना */
+
+html = html
+.replace(/\*\*(.*?)\*\*/g,"<b>$1</b>")
+.replace(/(योजना का नाम:)/g,"<br><b>📌 योजना का नाम:</b>")
+.replace(/(किसके लिए:)/g,"<br><b>👥 किसके लिए:</b>")
+.replace(/(मुख्य लाभ:)/g,"<br><b>🎁 मुख्य लाभ:</b>")
+.replace(/(पात्रता:)/g,"<br><b>✅ पात्रता:</b>")
+.replace(/(जरूरी दस्तावेज:)/g,"<br><b>📄 जरूरी दस्तावेज:</b>")
+.replace(/(आवेदन कैसे करें:)/g,"<br><b>📝 आवेदन कैसे करें:</b>")
+.replace(/(आधिकारिक वेबसाइट:)/g,"<br><b>🌐 आधिकारिक वेबसाइट:</b>")
+.replace(/\n/g,"<br>");
+
+
+result.innerHTML =
+`<div class="card">
+<h3>🇮🇳 योजनाओं की जानकारी</h3>
+<p>${html}</p>
+</div>`;
+
+}
+
+
+function escapeHTML(text){
+
+return text
+.replace(/&/g,"&amp;")
+.replace(/</g,"&lt;")
+.replace(/>/g,"&gt;")
+.replace(/"/g,"&quot;")
+.replace(/'/g,"&#039;");
+
+}
+
+</script>
+
+</body>
+</html>
